@@ -4,14 +4,10 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import * as sqlite3 from 'sqlite3'
 const sqlite = sqlite3.verbose()
-const db = new sqlite.Database('./data.db')
-db.run(`
-  CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT,
-    email TEXT
-  )
-`)
+const db = new sqlite.Database('./src/main/database/voyager.db')
+import Store from 'electron-store'
+
+const store = new Store()
 
 function createWindow(): void {
   // Create the browser window.
@@ -19,7 +15,7 @@ function createWindow(): void {
     width: 900,
     height: 670,
     show: false,
-    autoHideMenuBar: true,
+    autoHideMenuBar: false,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -39,24 +35,25 @@ function createWindow(): void {
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+    console.log('env', process.env['ELECTRON_RENDERER_URL'])
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 }
 function CreateAnotherWindow(): void {
-  // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 200,
-    height: 370,
+    width: 500,
+    height: 300,
     show: false,
-    autoHideMenuBar: true,
+    autoHideMenuBar: false,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
     }
   })
+
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })
@@ -69,7 +66,7 @@ function CreateAnotherWindow(): void {
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+    mainWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/employees`)
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
@@ -93,8 +90,28 @@ app.whenReady().then(() => {
 
   createWindow()
   ipcMain.on('insert-user', (_, data) => {
-    console.log('I am using this event')
-    db.run('INSERT INTO users (name, email) VALUES (?, ?)', data.name, data.email)
+    db.serialize(() => {
+      db.all('SELECT * FROM department', (err, rows) => {
+        if (err) {
+          console.error(err)
+          return
+        }
+        console.log(rows)
+      })
+    })
+    console.log(data)
+  })
+
+  ipcMain.on('electron-store-get', async (event, val) => {
+    console.log('HaMza')
+
+    // @ts-expect-error there is a type required here
+    event.returnValue = store.get(val)
+  })
+  ipcMain.on('electron-store-set', async (_, key, val) => {
+    console.log('HaMza')
+    // @ts-expect-error there is a type required here
+    store.set(key, val)
   })
 
   ipcMain.on('quit-app', () => {
