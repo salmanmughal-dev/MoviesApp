@@ -1,24 +1,27 @@
-# voyagerapp
+# Voyager
+![Voyager](https://github.com/user-attachments/assets/0ed50c7d-6ea6-419b-b280-6384e1840884)
 
-An Electron application with React and TypeScript
 
-## Recommended IDE Setup
+Voyager is an Human Resource Information System (HRIMS). It delivers a desktop software experience to effectively manage the overall employee information for an organisation. 
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
-## Project Setup
+ ## Features
 
-### Install
+- Employee Information 
+- Applications tracking 
+- Payroll generation 
+- Attendance compilance
+- Training & Certifications
+- User settings 
 
-```bash
-$ npm install
-```
+## Technology Used
 
-### Development
-
-```bash
-$ npm run dev
-```
+- Electron (Desktop framework)
+- Typescript (Programming Language)
+- SQLite (database)
+- Electron Store (user settings)
+- Ant Design for user interfaces
+- Tailwind CSS
 
 ### Build
 
