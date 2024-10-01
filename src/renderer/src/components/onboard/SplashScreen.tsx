@@ -4,6 +4,13 @@ import './animation.css'
 
 const SplashScreen = (): JSX.Element | null => {
   const navigate = useNavigate()
+  const handleClick = (): void => {
+    window.electron.store.set('user', {
+      username: 'salman',
+      password: '123'
+    })
+    navigate('/login')
+  }
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center">
       <div className="starry-background">
@@ -19,7 +26,7 @@ const SplashScreen = (): JSX.Element | null => {
       <img
         src={voyager}
         alt="Logo"
-        onClick={() => navigate('/login')}
+        onClick={handleClick}
         className="animate-pulse rounded-full lg:w-96 w-60 h-auto"
       />
     </div>
