@@ -10,6 +10,8 @@ declare global {
         // any other methods you've defined...
       }
     }
-    api: unknown
+    api: {
+      getDepartments: () => Promise<Array<object>>
+    }
   }
 }

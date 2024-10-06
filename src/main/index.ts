@@ -118,6 +118,36 @@ app.whenReady().then(() => {
     CreateAnotherWindow()
   })
 
+  ipcMain.handle('get-departments', async (): Promise<Array<object>> => {
+    console.log('departments........................')
+    return new Promise((resolve, reject) => {
+      db.all(
+        `SELECT 
+    e.employeeid AS employeeId, 
+    e.name AS employeeName, 
+    e.position, 
+    e.hireDate AS hireDate, 
+    d.departmentid, 
+    d.name AS departmentName, 
+    d.managerid AS managerId
+FROM 
+    employee e
+JOIN 
+    department d
+ON 
+    e.departmentid = d.departmentid;
+`,
+        (err, rows: Array<object>) => {
+          if (err) {
+            console.error(err)
+            reject(err)
+          }
+          console.log(rows)
+          resolve(rows)
+        }
+      )
+    })
+  })
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
