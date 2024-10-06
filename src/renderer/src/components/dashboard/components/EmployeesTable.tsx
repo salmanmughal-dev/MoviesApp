@@ -98,7 +98,7 @@ const data: DataType[] = [
     tags: ['cool', 'teacher']
   },
   {
-    key: '6',
+    key: '5',
     name: 'Joe Black',
     age: 32,
     address: 'Sydney No. 1 Lake Park',

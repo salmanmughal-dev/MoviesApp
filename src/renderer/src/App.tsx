@@ -3,6 +3,7 @@ import SplashScreen from './components/onboard/SplashScreen'
 import Login from './components/login/Login'
 import BaseLayout from './components/base/Base'
 import DashboardLayout from './components/dashboard/DashboardLayout'
+import { Attendance } from './components/attendance/Attendance'
 function App(): JSX.Element {
   return (
     <>
@@ -11,7 +12,7 @@ function App(): JSX.Element {
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<BaseLayout />}>
           <Route path="dashboard" element={<DashboardLayout />} />
-          <Route path="attendance" element={<h2>hello world222</h2>} />
+          <Route path="attendance" element={<Attendance />} />
         </Route>
       </Routes>
     </>
