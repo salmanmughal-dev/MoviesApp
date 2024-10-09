@@ -2,7 +2,7 @@
 ![Voyager](https://github.com/user-attachments/assets/0ed50c7d-6ea6-419b-b280-6384e1840884)
 
 
-Voyager is an Human Resource Information System (HRIMS). It delivers a desktop software experience to effectively manage the overall employee information for an organisation. 
+Voyager a person project is an Human Resource Information System (HRIMS). It delivers a desktop software experience to effectively manage the overall employee information for an organisation. 
 
 
  ## Features
