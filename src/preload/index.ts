@@ -3,7 +3,8 @@ import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
 const api = {
-  getDepartments: (): Promise<Array<object>> => ipcRenderer.invoke('get-departments')
+  getDepartments: (): Promise<Array<object>> => ipcRenderer.invoke('get-departments'),
+  editEmployee: (record): Promise<void> => ipcRenderer.invoke('edit-employee', record)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

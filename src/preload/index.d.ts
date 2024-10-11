@@ -12,6 +12,7 @@ declare global {
     }
     api: {
       getDepartments: () => Promise<Array<object>>
+      editEmployee: (record) => Promise<void>
     }
   }
 }

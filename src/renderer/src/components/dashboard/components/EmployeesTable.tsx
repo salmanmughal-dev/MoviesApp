@@ -1,112 +1,85 @@
-import React from 'react'
-import { ConfigProvider, Space, Table, Tag } from 'antd'
+import React, { useEffect } from 'react'
+import { ConfigProvider, Space, Table } from 'antd'
 import type { TableProps } from 'antd'
+import { CloseSquareFilled, EditFilled } from '@ant-design/icons'
 
 type ColumnsType<T extends object> = TableProps<T>['columns']
 
 interface DataType {
-  key: string
-  name: string
-  age: number
-  address: string
-  tags: string[]
+  employeeId: number
+  employeeName: string
+  position: string
+  hireDate: string
+  departmentName: string
+  managerId: number
 }
 
 const columns: ColumnsType<DataType> = [
   {
+    title: 'Employee ID',
+    dataIndex: 'employeeId',
+    key: 'employeeId'
+  },
+  {
     title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
+    dataIndex: 'employeeName',
+    key: 'employeeName',
     render: (text) => <a>{text}</a>
   },
   {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age'
+    title: 'Position',
+    dataIndex: 'position',
+    key: 'position'
   },
   {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address'
+    title: 'Hire Date',
+    dataIndex: 'hireDate',
+    key: 'hireDate'
   },
   {
-    title: 'Tags',
-    key: 'tags',
-    dataIndex: 'tags',
-    render: (tags: string[]) => (
-      <span>
-        {tags.map((tag) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green'
-          if (tag === 'loser') {
-            color = 'volcano'
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          )
-        })}
-      </span>
+    title: 'Department',
+    dataIndex: 'departmentName',
+    key: 'departmentName'
+  },
+  {
+    title: 'Manager ID',
+    dataIndex: 'managerId',
+    key: 'managerId',
+    render: (_, record) => (
+      <Space size="middle">
+        <h1>{record.managerId ? record.managerId : 'N/A'}</h1>
+      </Space>
     )
   },
   {
     title: 'Action',
     key: 'action',
     render: (_, record) => (
-      <Space className="hidden xl:block" size="middle">
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
-      </Space>
+      <div className="flex gap-1">
+        <button
+          onClick={async () => await window.api.editEmployee(record)}
+          className="px-3 py-1 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition duration-300"
+        >
+          <EditFilled className="text-white" />
+        </button>
+        <button className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-300">
+          <CloseSquareFilled className="text-white" />
+        </button>
+      </div>
     )
   }
 ]
 
-const data: DataType[] = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer']
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser']
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher']
-  },
-  {
-    key: '4',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher']
-  },
-  {
-    key: '5',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher']
-  },
-  {
-    key: '5',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher']
-  }
-]
-
 const EmployeesTable: React.FC = () => {
+  const [data, setData] = React.useState<DataType[]>([])
+  const fetchData = async (): Promise<void> => {
+    const departments = await window.api.getDepartments()
+    // @ts-expect-error there is an exception for typescript type.
+    setData(departments)
+  }
+  useEffect(() => {
+    fetchData()
+  }, [])
   return (
     <ConfigProvider
       theme={{
@@ -118,7 +91,7 @@ const EmployeesTable: React.FC = () => {
         }
       }}
     >
-      <div>
+      <div className="p-4">
         <Table<DataType> columns={columns} pagination={{ pageSize: 5 }} dataSource={data} />
       </div>
     </ConfigProvider>
