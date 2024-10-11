@@ -41,10 +41,11 @@ function createWindow(): void {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 }
-function CreateAnotherWindow(): void {
+
+function CreateAnotherWindow(record): void {
   const mainWindow = new BrowserWindow({
-    width: 500,
-    height: 300,
+    width: 1200,
+    height: 900,
     show: false,
     autoHideMenuBar: false,
     ...(process.platform === 'linux' ? { icon } : {}),
@@ -66,7 +67,7 @@ function CreateAnotherWindow(): void {
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/employees`)
+    mainWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/edit/employee/${record.employeeId}`)
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
@@ -114,8 +115,8 @@ app.whenReady().then(() => {
     store.set(key, val)
   })
 
-  ipcMain.on('quit-app', () => {
-    CreateAnotherWindow()
+  ipcMain.handle('edit-employee', async (event, record): Promise<void> => {
+    CreateAnotherWindow(record)
   })
 
   ipcMain.handle('get-departments', async (): Promise<Array<object>> => {

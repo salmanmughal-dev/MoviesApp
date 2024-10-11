@@ -6,7 +6,7 @@ const cardData = [
   {
     title: 'Total Employees',
     icon: <UserOutlined className="text-4xl text-blue-500" />,
-    value: '121'
+    value: '11'
   },
   {
     title: 'Tax',
