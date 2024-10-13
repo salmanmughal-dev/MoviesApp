@@ -32,7 +32,8 @@ module.exports = {
         }
       },
       colors: {
-        'dark-orange': '#FF8C00'
+        'dark-orange': '#FF8C00',
+        primary: '#FF784D'
       }
     }
   },

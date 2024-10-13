@@ -73,6 +73,37 @@ function CreateAnotherWindow(record): void {
   }
 }
 
+function CreatePayrollWindow(): void {
+  const mainWindow = new BrowserWindow({
+    width: 1200,
+    height: 900,
+    show: false,
+    autoHideMenuBar: false,
+    ...(process.platform === 'linux' ? { icon } : {}),
+    webPreferences: {
+      preload: join(__dirname, '../preload/index.js'),
+      sandbox: false
+    }
+  })
+
+  mainWindow.on('ready-to-show', () => {
+    mainWindow.show()
+  })
+
+  mainWindow.webContents.setWindowOpenHandler((details) => {
+    shell.openExternal(details.url)
+    return { action: 'deny' }
+  })
+
+  // HMR for renderer base on electron-vite cli.
+  // Load the remote URL for development or the local html file for production.
+  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+    mainWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/payroll/generate`)
+  } else {
+    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+  }
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -119,6 +150,9 @@ app.whenReady().then(() => {
     CreateAnotherWindow(record)
   })
 
+  ipcMain.handle('generate-payroll', async (): Promise<void> => {
+    CreatePayrollWindow()
+  })
   ipcMain.handle('get-departments', async (): Promise<Array<object>> => {
     console.log('departments........................')
     return new Promise((resolve, reject) => {

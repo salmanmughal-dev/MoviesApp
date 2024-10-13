@@ -66,8 +66,11 @@ const Sidebar = (): JSX.Element => {
           defaultSelectedKeys={[defaultKey]}
           mode="inline"
           onClick={(e) => {
+            console.log(e.key)
             if (e.key === '2') navigate('/attendance')
             else if (e.key === '1') navigate('/dashboard')
+            else if (e.key === '9') navigate('/training')
+            else if (e.key === '10') navigate('/payrolls')
           }}
           items={items}
         />
