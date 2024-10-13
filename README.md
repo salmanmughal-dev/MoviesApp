@@ -13,6 +13,11 @@ Voyager is an ongoing personal project. It is an Human Resource Information Syst
 - Ant Design for user interfaces
 - Tailwind CSS
 
+## SS
+
+![image](https://github.com/user-attachments/assets/1e830a36-2ec0-428f-8526-b281c4d5fdde)
+
+
 ### Build
 
 ```bash
